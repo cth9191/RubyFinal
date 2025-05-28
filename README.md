@@ -46,21 +46,6 @@ rails server
 
 Visit `http://localhost:3000` to see your application!
 
-## 🌐 Deployment
-
-This application is ready for production deployment on multiple platforms:
-
-### Recommended Platforms
-
-- **[Railway](https://railway.app)** ⭐ - Best for Rails applications
-- **[Render](https://render.com)** ⭐ - Excellent Rails support  
-- **[Heroku](https://heroku.com)** - Classic choice
-- **[DigitalOcean App Platform](https://digitalocean.com/products/app-platform)** - Great performance
-
-### Why Not Vercel?
-
-Vercel is designed for static sites and serverless functions. Rails applications need persistent server processes and database connections, making Railway, Render, or Heroku better choices.
-
 ### Environment Variables
 
 Set these environment variables on your deployment platform:
@@ -144,22 +129,5 @@ git push -u origin main
 
 3. **Your app will be live** at `https://your-app.railway.app`
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🎯 Demo
-
-Try the live demo: [Your Deployed URL Here]
-
----
-
-**Built with ❤️ using Ruby on Rails and modern web technologies**
