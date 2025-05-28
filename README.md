@@ -1,16 +1,9 @@
 # AI Cover Letter Generator 🚀
 
-A beautiful, modern Rails application that generates personalized cover letters using AI through n8n automation workflows.
+Generate personalized cover letters with this Ruby built, n8n powered web app!
 
 ![Cover Letter Generator](https://img.shields.io/badge/Rails-7.1.5-red) ![Ruby](https://img.shields.io/badge/Ruby-3.0+-red) ![Status](https://img.shields.io/badge/Status-Production%20Ready-green)
 
-## ✨ Features
-
-- **🎨 Beautiful Modern UI** - Glass-morphism design with smooth animations
-- **🤖 AI-Powered Generation** - Integrates with n8n workflows for intelligent cover letter creation
-- **📱 Mobile Responsive** - Works perfectly on all devices
-- **⚡ Fast & Secure** - Built with Rails best practices
-- **🔧 Easy Deployment** - Ready for production deployment
 
 ## 🚀 Quick Start
 
