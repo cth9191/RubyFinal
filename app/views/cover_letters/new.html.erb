@@ -1,0 +1,560 @@
+<div class="page-wrapper">
+  <div class="background-pattern"></div>
+  <div class="container">
+    <div class="header">
+      <div class="logo-container">
+        <div class="logo-icon">✨</div>
+        <h1>AI Cover Letter Generator</h1>
+      </div>
+      <p class="subtitle">Transform your job applications with AI-powered personalization</p>
+      <div class="feature-badges">
+        <span class="badge">🚀 Instant Generation</span>
+        <span class="badge">🎯 Personalized</span>
+        <span class="badge">💼 Professional</span>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Tell us about your dream job</h2>
+        <p>Fill in the details below and watch the magic happen</p>
+      </div>
+
+      <%= form_with model: @cover_letter, local: true, class: "cover-letter-form" do |form| %>
+        <% if @cover_letter.errors.any? %>
+          <div class="error-messages">
+            <div class="error-icon">⚠️</div>
+            <div class="error-content">
+              <h3>Oops! Please fix these issues:</h3>
+              <ul>
+                <% @cover_letter.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <div class="input-wrapper">
+              <%= form.label :user_name, class: "form-label" do %>
+                <span class="label-icon">👤</span>
+                <span class="label-text">Your Full Name</span>
+              <% end %>
+              <%= form.text_field :user_name, class: "form-input", placeholder: "e.g., John Smith", required: true %>
+              <div class="input-border"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-wrapper">
+              <%= form.label :company_name, class: "form-label" do %>
+                <span class="label-icon">🏢</span>
+                <span class="label-text">Company Name</span>
+              <% end %>
+              <%= form.text_field :company_name, class: "form-input", placeholder: "e.g., Google, Microsoft, Startup Inc.", required: true %>
+              <div class="input-border"></div>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <div class="input-wrapper">
+              <%= form.label :role, class: "form-label" do %>
+                <span class="label-icon">💼</span>
+                <span class="label-text">Position/Role</span>
+              <% end %>
+              <%= form.text_field :role, class: "form-input", placeholder: "e.g., Software Engineer, Marketing Manager", required: true %>
+              <div class="input-border"></div>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <div class="input-wrapper">
+              <%= form.label :extra_info, class: "form-label" do %>
+                <span class="label-icon">✨</span>
+                <span class="label-text">Additional Information</span>
+                <span class="label-optional">(Optional)</span>
+              <% end %>
+              <%= form.text_area :extra_info, class: "form-textarea", placeholder: "Tell us about your relevant skills, experiences, or specific requirements you'd like to highlight...", rows: 4 %>
+              <div class="input-border"></div>
+              <small class="form-help">💡 The more details you provide, the better your cover letter will be!</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <%= form.submit "Generate My Cover Letter", class: "btn btn-primary" %>
+          <div class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <span>Creating your perfect cover letter...</span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="trust-indicators">
+      <div class="trust-item">
+        <div class="trust-icon">🔒</div>
+        <span>Secure & Private</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">⚡</div>
+        <span>Lightning Fast</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🎯</div>
+        <span>AI Powered</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .page-wrapper {
+    position: relative;
+    min-height: 100vh;
+    padding: 20px 0;
+  }
+
+  .background-pattern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+    z-index: -1;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .logo-icon {
+    font-size: 3rem;
+    animation: pulse 2s infinite;
+  }
+
+  .header h1 {
+    color: white;
+    font-size: 3rem;
+    margin: 0;
+    font-weight: 700;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.3rem;
+    margin: 15px 0 30px 0;
+    font-weight: 300;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .feature-badges {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+  }
+
+  .badge {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .badge:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .form-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  .form-header {
+    text-align: center;
+    margin-bottom: 35px;
+  }
+
+  .form-header h2 {
+    color: #2d3748;
+    font-size: 1.8rem;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+  }
+
+  .form-header p {
+    color: #718096;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 35px;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  .form-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+
+  .label-icon {
+    font-size: 1.1rem;
+  }
+
+  .label-optional {
+    color: #a0aec0;
+    font-weight: 400;
+    font-size: 0.9rem;
+  }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    position: relative;
+    z-index: 1;
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+  }
+
+  .input-border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.3s ease;
+    border-radius: 1px;
+  }
+
+  .form-input:focus + .input-border,
+  .form-textarea:focus + .input-border {
+    width: 100%;
+  }
+
+  .form-help {
+    display: block;
+    color: #718096;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  .form-actions {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .btn {
+    padding: 18px 40px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+  }
+
+  .btn-primary:active {
+    transform: translateY(-1px);
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-primary:hover::before {
+    left: 100%;
+  }
+
+  .loading-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    color: #718096;
+  }
+
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e2e8f0;
+    border-top: 2px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .trust-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 50px;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+  }
+
+  .trust-icon {
+    font-size: 1.2rem;
+  }
+
+  .error-messages {
+    background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+    border: 1px solid #fc8181;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .error-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .error-content h3 {
+    color: #c53030;
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+  }
+
+  .error-content ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .error-content li {
+    color: #c53030;
+    margin-bottom: 5px;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 15px;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+    }
+
+    .form-container {
+      padding: 25px;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .feature-badges {
+      gap: 10px;
+    }
+
+    .trust-indicators {
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .logo-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.cover-letter-form');
+    const submitBtn = form.querySelector('.btn-primary');
+    const loadingIndicator = document.querySelector('.loading-indicator');
+
+    form.addEventListener('submit', function() {
+      submitBtn.style.display = 'none';
+      loadingIndicator.style.display = 'flex';
+    });
+
+    // Add floating animation to form inputs
+    const inputs = document.querySelectorAll('.form-input, .form-textarea');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateY(-2px)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'translateY(0)';
+      });
+    });
+  });
+</script>

@@ -1,0 +1,663 @@
+<div class="page-wrapper">
+  <div class="background-pattern"></div>
+  <div class="container">
+    <div class="header">
+      <div class="success-animation">
+        <div class="checkmark">✓</div>
+      </div>
+      <h1>Your Cover Letter is Ready!</h1>
+      <p class="subtitle">Crafted with AI precision for <%= @cover_letter.user_name %> at <%= @cover_letter.company_name %></p>
+    </div>
+
+    <div class="result-container">
+      <div class="application-summary">
+        <h3>📋 Application Summary</h3>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-icon">👤</div>
+            <div class="summary-content">
+              <span class="summary-label">Applicant</span>
+              <span class="summary-value"><%= @cover_letter.user_name %></span>
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-icon">🏢</div>
+            <div class="summary-content">
+              <span class="summary-label">Company</span>
+              <span class="summary-value"><%= @cover_letter.company_name %></span>
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-icon">💼</div>
+            <div class="summary-content">
+              <span class="summary-label">Position</span>
+              <span class="summary-value"><%= @cover_letter.role %></span>
+            </div>
+          </div>
+          <% if @cover_letter.extra_info.present? %>
+            <div class="summary-item full-width">
+              <div class="summary-icon">✨</div>
+              <div class="summary-content">
+                <span class="summary-label">Additional Details</span>
+                <span class="summary-value"><%= @cover_letter.extra_info %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="cover-letter-section">
+        <div class="letter-header">
+          <h3>📄 Your Generated Cover Letter</h3>
+          <div class="letter-actions">
+            <button onclick="copyToClipboard()" class="btn btn-secondary">
+              <span class="btn-icon">📋</span>
+              <span class="btn-text">Copy</span>
+            </button>
+            <button onclick="window.print()" class="btn btn-outline">
+              <span class="btn-icon">🖨️</span>
+              <span class="btn-text">Print</span>
+            </button>
+          </div>
+        </div>
+        
+        <div class="letter-content" id="letterContent">
+          <% if @cover_letter.generated_letter.present? %>
+            <div class="letter-text">
+              <%= simple_format(@cover_letter.generated_letter) %>
+            </div>
+          <% else %>
+            <div class="error-state">
+              <div class="error-icon">⚠️</div>
+              <div class="error-content">
+                <h4>Oops! Something went wrong</h4>
+                <p>We couldn't generate your cover letter. Please try again.</p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="action-section">
+        <div class="primary-actions">
+          <%= link_to new_cover_letter_path, class: "btn btn-primary" do %>
+            <span class="btn-icon">✨</span>
+            <span class="btn-text">Create Another Letter</span>
+          <% end %>
+        </div>
+        
+        <div class="secondary-actions">
+          <button onclick="downloadAsText()" class="btn btn-ghost">
+            <span class="btn-icon">💾</span>
+            <span class="btn-text">Download</span>
+          </button>
+          <button onclick="shareViaEmail()" class="btn btn-ghost">
+            <span class="btn-icon">📧</span>
+            <span class="btn-text">Email</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="satisfaction-section">
+      <h4>How did we do?</h4>
+      <div class="rating-buttons">
+        <button class="rating-btn" data-rating="excellent">😍 Excellent</button>
+        <button class="rating-btn" data-rating="good">😊 Good</button>
+        <button class="rating-btn" data-rating="okay">😐 Okay</button>
+        <button class="rating-btn" data-rating="poor">😞 Poor</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .page-wrapper {
+    position: relative;
+    min-height: 100vh;
+    padding: 20px 0;
+  }
+
+  .background-pattern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+    z-index: -1;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .success-animation {
+    margin-bottom: 20px;
+  }
+
+  .checkmark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    border-radius: 50%;
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
+    animation: bounceIn 0.8s ease-out;
+  }
+
+  .header h1 {
+    color: white;
+    font-size: 2.8rem;
+    margin: 20px 0 10px 0;
+    font-weight: 700;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+    margin: 0;
+    font-weight: 300;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .result-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    margin-bottom: 30px;
+  }
+
+  .application-summary {
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #f7fafc;
+  }
+
+  .application-summary h3 {
+    color: #2d3748;
+    font-size: 1.5rem;
+    margin: 0 0 25px 0;
+    font-weight: 600;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .summary-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+  }
+
+  .summary-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .summary-item.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .summary-icon {
+    font-size: 1.8rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  .summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .summary-label {
+    font-size: 0.9rem;
+    color: #718096;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .summary-value {
+    font-size: 1.1rem;
+    color: #2d3748;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .cover-letter-section {
+    margin-bottom: 40px;
+  }
+
+  .letter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .letter-header h3 {
+    color: #2d3748;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .letter-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .letter-content {
+    background: #fefefe;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 30px;
+    line-height: 1.7;
+    font-size: 1rem;
+    color: #2d3748;
+    min-height: 300px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .letter-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  .letter-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  .error-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    text-align: center;
+    color: #e53e3e;
+    min-height: 200px;
+  }
+
+  .error-icon {
+    font-size: 3rem;
+  }
+
+  .error-content h4 {
+    margin: 0 0 10px 0;
+    font-size: 1.3rem;
+  }
+
+  .error-content p {
+    margin: 0;
+    color: #718096;
+  }
+
+  .action-section {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 2px solid #f7fafc;
+  }
+
+  .primary-actions {
+    margin-bottom: 20px;
+  }
+
+  .secondary-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    padding: 16px 32px;
+    font-size: 1.1rem;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+  }
+
+  .btn-secondary {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.3);
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+  }
+
+  .btn-outline:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+  }
+
+  .btn-ghost:hover {
+    background: rgba(102, 126, 234, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+
+  .satisfaction-section {
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+
+  .satisfaction-section h4 {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.3rem;
+    margin: 0 0 20px 0;
+    font-weight: 500;
+  }
+
+  .rating-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .rating-btn {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .rating-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .rating-btn.selected {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @media print {
+    body {
+      background: white;
+    }
+    
+    .header, .application-summary, .letter-header .letter-actions, .action-section, .satisfaction-section, .background-pattern {
+      display: none;
+    }
+    
+    .container {
+      max-width: none;
+      padding: 0;
+    }
+    
+    .result-container {
+      box-shadow: none;
+      border: none;
+      padding: 0;
+      background: white;
+    }
+    
+    .letter-content {
+      border: none;
+      padding: 0;
+      background: white;
+    }
+
+    .letter-content::before {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 15px;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+
+    .result-container {
+      padding: 25px;
+    }
+
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .letter-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .letter-actions {
+      justify-content: center;
+    }
+
+    .secondary-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .rating-buttons {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkmark {
+      width: 60px;
+      height: 60px;
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<script>
+  function copyToClipboard() {
+    const letterContent = document.getElementById('letterContent').innerText;
+    navigator.clipboard.writeText(letterContent).then(function() {
+      const button = event.target.closest('.btn-secondary');
+      const originalHTML = button.innerHTML;
+      button.innerHTML = '<span class="btn-icon">✅</span><span class="btn-text">Copied!</span>';
+      button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+      
+      setTimeout(() => {
+        button.innerHTML = originalHTML;
+        button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+      }, 2000);
+    }).catch(function(err) {
+      console.error('Could not copy text: ', err);
+      alert('Failed to copy to clipboard. Please select and copy manually.');
+    });
+  }
+
+  function downloadAsText() {
+    const letterContent = document.getElementById('letterContent').innerText;
+    const blob = new Blob([letterContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cover-letter.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
+
+  function shareViaEmail() {
+    const letterContent = document.getElementById('letterContent').innerText;
+    const subject = 'My Cover Letter for <%= @cover_letter.role %> at <%= @cover_letter.company_name %>';
+    const body = encodeURIComponent(letterContent);
+    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${body}`;
+  }
+
+  // Rating functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const ratingButtons = document.querySelectorAll('.rating-btn');
+    
+    ratingButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove selected class from all buttons
+        ratingButtons.forEach(btn => btn.classList.remove('selected'));
+        
+        // Add selected class to clicked button
+        this.classList.add('selected');
+        
+        // You could send this rating to your server here
+        const rating = this.dataset.rating;
+        console.log('User rated:', rating);
+        
+        // Show thank you message
+        setTimeout(() => {
+          this.innerHTML = '🙏 Thank you!';
+        }, 500);
+      });
+    });
+  });
+</script>
