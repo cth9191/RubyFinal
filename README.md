@@ -77,23 +77,6 @@ Your n8n workflow should return JSON in this format:
 }
 ```
 
-## 🎨 UI Features
-
-- **Gradient Background** - Beautiful purple-blue gradient with animated patterns
-- **Glass-morphism Cards** - Modern frosted glass effect
-- **Smooth Animations** - Engaging hover effects and transitions
-- **Form Validation** - Real-time validation with helpful error messages
-- **Loading States** - Elegant loading indicators during generation
-- **Success Animations** - Celebratory animations on completion
-
-## 🛠️ Tech Stack
-
-- **Backend**: Ruby on Rails 7.1.5
-- **Database**: SQLite3 (development), PostgreSQL (production)
-- **Styling**: Custom CSS with modern design patterns
-- **Deployment**: Railway/Render/Heroku ready
-- **Environment**: dotenv for configuration management
-
 ## 📁 Project Structure
 
 ```
